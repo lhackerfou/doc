@@ -1,0 +1,46 @@
+configuration telnet, nom, mdp
+
+#hostname drieux
+#enable secret drieux
+#line console 0 #password drieux #login
+#line vty 0 15 #password drieux #login
+
+
+création d'une vlan
+
+#int vlan1 #ip address 192.168.1.1 255.255.255.0 #no shutdwon
+#vlan 1 #name drieux
+#sh run
+
+connection aux ports
+
+#int fa0/1 #switchport mode access
+#int fa0/2 #switchport access vlan1 
+#int range fa0/1-2
+
+
+trunk
+
+#switchport trunk encapsulation dot1q
+#switchport mode trunk
+
+vtp
+
+#vtp mode tranparent
+#vtp mode client
+#vtp mode server #vtp domain drieux #vtp password drieux
+#sh vtp statut
+
+vstp
+
+#no spanning-tree vlan 1-1000
+#spanning-tree mode pvstp
+#spanning-tree vlan 10
+
+dhcp
+
+#ip dhcp pool vlan1
+#network 192.168.1.0 255.255.255.0
+#dns-server 8.8.8.8
+#default-router 192.168.1.1
+#ip dhcp excluded-address 192.168.1.240 192.168.1.250
